@@ -208,32 +208,22 @@
             margin-bottom: 6px;
             border-left: 3px solid #f5b042;
             flex-wrap: wrap;
-            gap: 4px;
         }
         .apostador-nome {
             font-weight: bold;
             color: #f5b042;
-            min-width: 80px;
+            min-width: 100px;
         }
         .apostador-placar {
             display: flex;
-            gap: 6px;
+            gap: 12px;
             flex-wrap: wrap;
-            align-items: center;
         }
         .placar-item {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.05);
             padding: 2px 10px;
             border-radius: 20px;
             font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .placar-item .vs {
-            color: #f5b042;
-            font-weight: bold;
-            margin: 0 2px;
         }
     </style>
 </head>
@@ -326,7 +316,7 @@
                 </div>
             </div>
 
-            <!-- COLUNA CENTRAL + DIREITA -->
+            <!-- COLUNA CENTRAL + DIREITA (2 colunas) -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- RESULTADO OFICIAL -->
                 <div class="glass-card p-5">
@@ -348,7 +338,7 @@
                     </div>
                 </div>
 
-                <!-- LISTA DE APOSTADORES -->
+                <!-- LISTA DE APOSTADORES (SIMPLES, SEM RANKING) -->
                 <div class="glass-card p-5">
                     <h2 class="text-xl font-bold flex items-center gap-2 border-b border-yellow-600/40 pb-2 mb-4">
                         <i class="fas fa-list-ul"></i> Lista de Apostas
@@ -357,10 +347,10 @@
                     <div id="apostasList" class="space-y-1">
                         <!-- Lista dinâmica -->
                     </div>
-                    <p class="text-xs text-gray-400 mt-3 text-center">✔ Cada linha: apostador + placar(es) apostado(s).</p>
+                    <p class="text-xs text-gray-400 mt-3 text-center">✔ Cada linha mostra o apostador e seu(s) placar(es) apostado(s).</p>
                 </div>
 
-                <!-- ÁREA DE APOSTAS DO PARTICIPANTE -->
+                <!-- ÁREA DE APOSTAS DO PARTICIPANTE SELECIONADO (ADMIN) -->
                 <div class="glass-card p-5">
                     <div class="flex flex-wrap justify-between items-center gap-3 border-b border-yellow-600/40 pb-2 mb-4">
                         <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-dice-d6"></i> Minhas Apostas: <span id="selectedUserName" class="text-yellow-300">—</span></h2>
@@ -440,27 +430,19 @@
         let isAdminVisible = false;
 
         // ============================================================
-        // DADOS DE EXEMPLO
+        // DADOS DE EXEMPLO (Roger e Maria) - FORMATO COMPACTO
         // ============================================================
         function getExemploData() {
             return [
-                {
-                    id: "vaga_001",
-                    nome: "Roger",
-                    apostas: [
-                        { brasil: 2, haiti: 1 }
-                    ]
-                },
-                {
-                    id: "vaga_002",
-                    nome: "Maria",
-                    apostas: [
-                        { brasil: 3, haiti: 0 }
-                    ]
-                }
+                {"id":"vaga_001","nome":"Roger","apostas":[{"brasil":2,"haiti":1}]},
+                {"id":"vaga_002","nome":"Maria","apostas":[{"brasil":3,"haiti":0}]},
+                {"id":"vaga_002","nome":"Neide","apostas":[{"brasil":6,"haiti":0}]}
             ];
         }
 
+        // ============================================================
+        // GERAR 80 VAGAS (COM ROGER E MARIA INCLUSOS)
+        // ============================================================
         function gerar80Vagas() {
             const novosParticipantes = getExemploData();
             for (let i = 3; i <= 80; i++) {
@@ -612,7 +594,7 @@
         }
 
         // ============================================================
-        // ADICIONAR APOSTA VIA LINK
+        // ADICIONAR APOSTA AUTOMATICAMENTE (VIA LINK)
         // ============================================================
         function addBetAutomatically(playerName, homeGoals, awayGoals) {
             if (!playerName || playerName.trim() === '') {
@@ -664,7 +646,7 @@
         }
 
         // ============================================================
-        // PROCESSAR URL
+        // PROCESSAR PARÂMETROS DA URL
         // ============================================================
         function processUrlParams() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -699,31 +681,28 @@
         }
 
         // ============================================================
-        // ATUALIZAR JSON
+        // ATUALIZAR JSON DISPLAY (FORMATO COMPACTO)
         // ============================================================
         function updateJsonDisplay() {
             const display = document.getElementById("jsonDisplay");
             if (!display) return;
             
-            const jsonData = {
-                participantes: participants.map(p => ({
-                    id: p.id,
-                    nome: p.nome,
-                    apostas: p.apostas.map(b => ({
-                        brasil: b.brasil,
-                        haiti: b.haiti
-                    }))
-                })),
-                resultadoOficial: officialResult,
-                totalVagas: participants.length,
-                ultimaAtualizacao: new Date().toISOString()
-            };
+            // Construir JSON compacto para exibição
+            let jsonText = '{\n  "participantes": [\n';
+            participants.forEach((p, index) => {
+                const apostasStr = p.apostas.map(b => `{"brasil":${b.brasil},"haiti":${b.haiti}}`).join(',');
+                const linha = `    {"id":"${p.id}","nome":"${p.nome}","apostas":[${apostasStr}]}`;
+                jsonText += linha;
+                if (index < participants.length - 1) jsonText += ',';
+                jsonText += '\n';
+            });
+            jsonText += `  ],\n  "resultadoOficial":{"home":${officialResult.home !== null ? officialResult.home : 'null'},"away":${officialResult.away !== null ? officialResult.away : 'null'}},\n  "totalVagas":${participants.length},\n  "ultimaAtualizacao":"${new Date().toISOString()}"\n}`;
             
-            display.textContent = JSON.stringify(jsonData, null, 2);
+            display.textContent = jsonText;
         }
 
         // ============================================================
-        // ATUALIZAR UI
+        // ATUALIZAR TODA UI
         // ============================================================
         function updateAllUI() {
             renderAdminResultUI();
@@ -735,7 +714,7 @@
         }
 
         // ============================================================
-        // RENDERIZAR LISTA DE APOSTAS (com Brasil x Haiti)
+        // RENDERIZAR LISTA DE APOSTAS (SEM RANKING)
         // ============================================================
         function renderApostasList() {
             const container = document.getElementById("apostasList");
@@ -763,7 +742,7 @@
                 p.apostas.forEach(bet => {
                     const span = document.createElement('span');
                     span.className = 'placar-item';
-                    span.innerHTML = `🇧🇷 ${bet.brasil} <span class="vs">x</span> ${bet.haiti} 🇭🇹`;
+                    span.textContent = `${bet.brasil}x${bet.haiti}`;
                     placarDiv.appendChild(span);
                 });
                 
@@ -922,7 +901,7 @@
         }
 
         function carregarExemplo() {
-            if (confirm("⚠️ Isso irá recarregar o exemplo com Roger e Maria. Continuar?")) {
+            if (confirm("⚠️ Isso irá recarregar o exemplo com Roger e Maria. Todas as outras apostas serão perdidas. Continuar?")) {
                 participants = gerar80Vagas();
                 selectedParticipantId = participants[0]?.id || null;
                 officialResult = { home: null, away: null };
@@ -1081,18 +1060,17 @@
             const cancelBtn = document.getElementById("cancelJsonBtn");
             
             if (textarea.classList.contains("hidden")) {
-                const jsonData = {
-                    participantes: participants.map(p => ({
-                        id: p.id,
-                        nome: p.nome,
-                        apostas: p.apostas.map(b => ({
-                            brasil: b.brasil,
-                            haiti: b.haiti
-                        }))
-                    })),
-                    resultadoOficial: officialResult
-                };
-                textarea.value = JSON.stringify(jsonData, null, 2);
+                // Gerar JSON compacto para edição
+                let jsonText = '{\n  "participantes": [\n';
+                participants.forEach((p, index) => {
+                    const apostasStr = p.apostas.map(b => `{"brasil":${b.brasil},"haiti":${b.haiti}}`).join(',');
+                    const linha = `    {"id":"${p.id}","nome":"${p.nome}","apostas":[${apostasStr}]}`;
+                    jsonText += linha;
+                    if (index < participants.length - 1) jsonText += ',';
+                    jsonText += '\n';
+                });
+                jsonText += `  ],\n  "resultadoOficial":{"home":${officialResult.home !== null ? officialResult.home : 'null'},"away":${officialResult.away !== null ? officialResult.away : 'null'}}\n}`;
+                textarea.value = jsonText;
                 display.classList.add("hidden");
                 textarea.classList.remove("hidden");
                 updateBtn.classList.remove("hidden");
