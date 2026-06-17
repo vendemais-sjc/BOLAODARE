@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Bolão da Bila | Brasil x Haiti - Placar Exato</title>
+    <title>Bolão da Ré | Brasil x Haiti - Placar Exato</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -89,25 +89,30 @@
             color: #f5b042;
             letter-spacing: 2px;
         }
+        /* Botão Admin discreto */
         .admin-toggle {
-            background: rgba(245, 176, 66, 0.15);
-            border: 2px solid #f5b04260;
+            background: rgba(245, 176, 66, 0.08);
+            border: 1px solid #f5b04230;
             transition: all 0.3s ease;
-            color: #f5b042;
-            font-weight: bold;
-            padding: 10px 24px;
+            color: #f5b04280;
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: normal;
+            letter-spacing: 0.5px;
         }
         .admin-toggle:hover {
-            background: rgba(245, 176, 66, 0.25);
-            transform: scale(1.02);
+            background: rgba(245, 176, 66, 0.15);
+            color: #f5b042;
+            border-color: #f5b04260;
         }
         .admin-toggle.active {
-            background: rgba(245, 176, 66, 0.3);
+            background: rgba(245, 176, 66, 0.2);
             border-color: #f5b042;
-            box-shadow: 0 0 20px rgba(245, 176, 66, 0.2);
+            color: #f5b042;
         }
         .admin-toggle i {
-            font-size: 18px;
+            font-size: 12px;
         }
         
         .modal-overlay {
@@ -225,40 +230,83 @@
             border-radius: 20px;
             font-size: 0.9rem;
         }
+        /* Vídeo responsivo */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            border: 2px solid #f5b04240;
+        }
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Resultado oficial menor */
+        .resultado-mini {
+            font-size: 0.9rem;
+        }
+        .resultado-mini input {
+            font-size: 1rem;
+            padding: 4px 8px;
+            width: 50px;
+        }
+        .resultado-mini .btn-gold {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+        }
     </style>
 </head>
 <body class="text-white p-4 md:p-6">
 
     <div class="max-w-6xl mx-auto">
-        <!-- CABEÇALHO -->
-        <div class="text-center mb-8">
+        <!-- VÍDEO NO TOPO (1920x1080) -->
+        <div class="video-container">
+            <!-- Substitua o src pelo caminho do seu vídeo -->
+            <video id="bgVideo" autoplay muted loop playsinline>
+                <source src="re.mp4" type="video/mp4">
+                Seu navegador não suporta vídeo.
+            </video>
+            <!-- Texto de fallback (opcional) -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span class="text-amber-300 text-2xl font-black drop-shadow-lg" style="text-shadow: 0 0 30px rgba(245,176,66,0.5);">⚽ BOLÃO DA RÉ ⚽</span>
+            </div>
+        </div>
+
+        <!-- CABEÇALHO (sem badges de pontuação e 80 vagas) -->
+        <div class="text-center mb-6">
             <div class="inline-flex items-center gap-3 bg-black/40 backdrop-blur rounded-full px-6 py-2 mb-4 border border-yellow-600/40">
                 <i class="fas fa-futbol text-yellow-500 text-xl animate-pulse"></i>
-                <span class="text-sm font-bold tracking-widest text-yellow-300">BOLÃO DA BILA</span>
+                <span class="text-sm font-bold tracking-widest text-yellow-300">BOLÃO DA RÉ</span>
                 <i class="fas fa-crown text-yellow-500 text-xl"></i>
             </div>
             <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-r from-amber-300 via-yellow-500 to-orange-500 bg-clip-text text-transparent drop-shadow-lg">BRASIL x HAITI</h1>
             <p class="text-gray-200 text-lg mt-2 font-medium">⚽ PLACAR EXATO · APENAS 2 APOSTAS POR PARTICIPANTE ⚽</p>
             <div class="mt-3 flex justify-center gap-3 flex-wrap">
-                <span class="bg-black/50 text-amber-300 text-sm px-4 py-1.5 rounded-full"><i class="fas fa-tag"></i> Cada aposta: R$ 25,00</span>
-                <span class="bg-black/50 text-amber-300 text-sm px-4 py-1.5 rounded-full"><i class="fas fa-chart-line"></i> Pontuação: placar exato = 5 pontos</span>
-                <span class="bg-black/50 text-amber-300 text-sm px-4 py-1.5 rounded-full"><i class="fas fa-database"></i> 80 vagas</span>
+                <span class="bg-black/50 text-amber-300 text-sm px-4 py-1.5 rounded-full"><i class="fas fa-tag"></i> Cada aposta: R$ 30,00</span>
+                <!-- Removido o badge de pontuação e 80 vagas -->
             </div>
             
-            <button id="toggleAdminBtn" class="mt-6 admin-toggle rounded-full flex items-center justify-center gap-3 mx-auto transition-all">
+            <!-- Botão ADMIN discreto (pequeno) -->
+            <button id="toggleAdminBtn" class="mt-4 admin-toggle rounded-full flex items-center justify-center gap-1 mx-auto transition-all">
                 <i class="fas fa-user-shield"></i>
-                <span>🔐 ÁREA ADMINISTRATIVA</span>
-                <i class="fas fa-chevron-down text-xs"></i>
+                <span>Admin</span>
             </button>
-            <p class="text-xs text-gray-500 mt-2">Clique para acessar o painel de administração (senha: admin123)</p>
+            <p class="text-[10px] text-gray-600 mt-1">🔒 Área restrita</p>
         </div>
 
-        <!-- MODAL DE SENHA -->
+        <!-- MODAL DE SENHA (nova senha: patico16852) -->
         <div id="passwordModal" class="modal-overlay" style="display: none;">
             <div class="modal-box">
-                <h2>🔐 Área Administrativa</h2>
-                <p>Digite a senha para acessar o painel de administração</p>
-                <input type="password" id="adminPasswordInput" placeholder="Digite a senha..." autofocus>
+                <h2>🔐 Acesso Administrativo</h2>
+                <p>Digite a senha para gerenciar o bolão</p>
+                <input type="password" id="adminPasswordInput" placeholder="Senha" autofocus>
                 <div id="passwordError" class="modal-error">❌ Senha incorreta! Tente novamente.</div>
                 <div class="btn-group">
                     <button class="btn-cancel" onclick="closePasswordModal()">Cancelar</button>
@@ -308,7 +356,7 @@
                 <div class="glass-card p-5">
                     <h2 class="text-xl font-bold flex items-center gap-2 border-b border-yellow-600/40 pb-2 mb-3"><i class="fab fa-pix text-blue-400"></i> Pagamento PIX</h2>
                     <div class="bg-black/40 rounded-2xl p-4 text-center space-y-3">
-                        <p class="text-sm font-mono bg-gray-800/70 p-2 rounded-xl tracking-wider">Chave PIX: <strong class="text-yellow-300 text-base">12988461978</strong></p>
+                        <p class="text-sm font-mono bg-gray-800/70 p-2 rounded-xl tracking-wider">Chave PIX: <strong class="text-yellow-300 text-base">12 99641-6402</strong></p>
                         <button id="copyPixBtn" class="bg-amber-700/70 hover:bg-amber-600 transition w-full py-2 rounded-xl text-sm"><i class="fas fa-copy"></i> Copiar chave</button>
                     </div>
                     <hr class="border-white/10 my-4">
@@ -316,25 +364,25 @@
                 </div>
             </div>
 
-            <!-- COLUNA CENTRAL + DIREITA (2 colunas) -->
+            <!-- COLUNA CENTRAL + DIREITA -->
             <div class="lg:col-span-2 space-y-6">
-                <!-- RESULTADO OFICIAL -->
-                <div class="glass-card p-5">
-                    <div class="flex justify-between items-center flex-wrap gap-2 border-b border-yellow-600/40 pb-2 mb-4">
-                        <h2 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-flag-checkered text-red-400"></i> Resultado Oficial</h2>
-                        <span class="text-xs bg-amber-800/60 text-amber-200 px-3 py-1 rounded-full"><i class="fas fa-phone-alt"></i> Adm: 12988461978</span>
+                <!-- RESULTADO OFICIAL (menor) -->
+                <div class="glass-card p-3 resultado-mini">
+                    <div class="flex justify-between items-center flex-wrap gap-2 border-b border-yellow-600/40 pb-1 mb-2">
+                        <h2 class="text-sm font-bold flex items-center gap-1"><i class="fas fa-flag-checkered text-red-400"></i> Resultado Oficial</h2>
+                        <span class="text-[10px] bg-amber-800/60 text-amber-200 px-2 py-0.5 rounded-full"><i class="fas fa-phone-alt"></i> Adm: 12 99641-6402</span>
                     </div>
-                    <div id="adminResultArea" class="flex flex-col md:flex-row items-center justify-between gap-4 bg-black/30 rounded-2xl p-4">
-                        <div class="flex items-center gap-4 text-2xl font-black">
-                            <div class="text-center"><span class="block text-sm text-gray-300">BRASIL</span><span class="text-4xl">🇧🇷</span></div>
-                            <div class="flex gap-2 items-center">
-                                <input type="number" id="officialHomeGoals" placeholder="0" class="w-20 text-center bg-gray-800 border border-gray-600 rounded-xl py-2 text-2xl font-bold text-white number-input">
-                                <span class="text-3xl font-black text-yellow-500">x</span>
-                                <input type="number" id="officialAwayGoals" placeholder="0" class="w-20 text-center bg-gray-800 border border-gray-600 rounded-xl py-2 text-2xl font-bold text-white number-input">
+                    <div id="adminResultArea" class="flex flex-col md:flex-row items-center justify-between gap-2 bg-black/30 rounded-xl p-2">
+                        <div class="flex items-center gap-2 text-lg font-black">
+                            <div class="text-center"><span class="block text-[10px] text-gray-300">BRASIL</span><span class="text-xl">🇧🇷</span></div>
+                            <div class="flex gap-1 items-center">
+                                <input type="number" id="officialHomeGoals" placeholder="0" class="w-12 text-center bg-gray-800 border border-gray-600 rounded-lg py-1 text-lg font-bold text-white number-input">
+                                <span class="text-xl font-black text-yellow-500">x</span>
+                                <input type="number" id="officialAwayGoals" placeholder="0" class="w-12 text-center bg-gray-800 border border-gray-600 rounded-lg py-1 text-lg font-bold text-white number-input">
                             </div>
-                            <div class="text-center"><span class="block text-sm text-gray-300">HAITI</span><span class="text-4xl">🇭🇹</span></div>
+                            <div class="text-center"><span class="block text-[10px] text-gray-300">HAITI</span><span class="text-xl">🇭🇹</span></div>
                         </div>
-                        <button id="setOfficialResultBtn" class="btn-gold px-6 py-2 rounded-xl font-bold text-black text-lg"><i class="fas fa-check-double"></i> Definir</button>
+                        <button id="setOfficialResultBtn" class="btn-gold px-3 py-1 rounded-lg font-bold text-black text-sm"><i class="fas fa-check-double"></i> Definir</button>
                     </div>
                 </div>
 
@@ -347,7 +395,7 @@
                     <div id="apostasList" class="space-y-1">
                         <!-- Lista dinâmica -->
                     </div>
-                    <p class="text-xs text-gray-400 mt-3 text-center">✔ Cada linha mostra o apostador e seu(s) placar(es) apostado(s).</p>
+                    <p class="text-xs text-gray-400 mt-3 text-center">✔ Cada linha mostra o apostador e seu(s) placar(es).</p>
                 </div>
 
                 <!-- ÁREA DE APOSTAS DO PARTICIPANTE SELECIONADO (ADMIN) -->
@@ -357,12 +405,12 @@
                         <div class="text-sm bg-black/40 px-3 py-1 rounded-full"><i class="fas fa-exclamation-triangle text-yellow-400"></i> Limite: <strong class="text-yellow-400">2</strong></div>
                     </div>
                     <div id="betsContainer" class="space-y-3"></div>
-                    <button id="addBetBtn" class="mt-4 w-full border border-dashed border-yellow-500/50 bg-yellow-500/10 hover:bg-yellow-500/20 transition rounded-xl py-3 flex items-center justify-center gap-2 font-semibold"><i class="fas fa-plus-circle"></i> Adicionar Aposta (R$25,00)</button>
+                    <button id="addBetBtn" class="mt-4 w-full border border-dashed border-yellow-500/50 bg-yellow-500/10 hover:bg-yellow-500/20 transition rounded-xl py-3 flex items-center justify-center gap-2 font-semibold"><i class="fas fa-plus-circle"></i> Adicionar Aposta (R$30,00)</button>
                 </div>
             </div>
         </div>
 
-        <!-- ÁREA ADMINISTRATIVA -->
+        <!-- ÁREA ADMINISTRATIVA (protegida por senha) -->
         <div id="adminArea" class="mt-8 hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
                 <div class="glass-card p-5 admin-section">
@@ -422,7 +470,7 @@
         // ============================================================
         // CONFIGURAÇÃO
         // ============================================================
-        const ADMIN_PASSWORD = "admin123";
+        const ADMIN_PASSWORD = "patico16852";  // NOVA SENHA
         let isAdminAuthenticated = false;
         let officialResult = { home: null, away: null };
         let participants = [];
@@ -430,23 +478,23 @@
         let isAdminVisible = false;
 
         // ============================================================
-        // DADOS DE EXEMPLO (Roger e Maria) - FORMATO COMPACTO
+        // DADOS DE EXEMPLO (Roger, Maria, Neide, Renan)
         // ============================================================
         function getExemploData() {
             return [
                 {"id":"vaga_001","nome":"Roger","apostas":[{"brasil":2,"haiti":1}]},
                 {"id":"vaga_002","nome":"Maria","apostas":[{"brasil":3,"haiti":0}]},
                 {"id":"vaga_003","nome":"Neide","apostas":[{"brasil":6,"haiti":0}]},
-                 {"id":"vaga_004","nome":"Renan","apostas":[{"brasil":2,"haiti":0}]}
+                {"id":"vaga_004","nome":"Renan","apostas":[{"brasil":2,"haiti":0}]}
             ];
         }
 
         // ============================================================
-        // GERAR 80 VAGAS (COM ROGER E MARIA INCLUSOS)
+        // GERAR 80 VAGAS
         // ============================================================
         function gerar80Vagas() {
             const novosParticipantes = getExemploData();
-            for (let i = 3; i <= 80; i++) {
+            for (let i = 5; i <= 80; i++) {
                 const num = String(i).padStart(3, '0');
                 novosParticipantes.push({
                     id: `vaga_${num}`,
@@ -526,16 +574,14 @@
             if (isAdminVisible && isAdminAuthenticated) {
                 adminArea.classList.remove("hidden");
                 btn.classList.add("active");
-                btn.querySelector("span").textContent = "🔐 OCULTAR ADMIN";
-                btn.querySelector(".fa-chevron-down").className = "fas fa-chevron-up text-xs";
+                btn.innerHTML = '<i class="fas fa-user-shield"></i> Admin <i class="fas fa-chevron-up text-[10px]"></i>';
             } else if (isAdminVisible && !isAdminAuthenticated) {
                 isAdminVisible = false;
                 showPasswordModal();
             } else {
                 adminArea.classList.add("hidden");
                 btn.classList.remove("active");
-                btn.querySelector("span").textContent = "🔐 ÁREA ADMINISTRATIVA";
-                btn.querySelector(".fa-chevron-up").className = "fas fa-chevron-down text-xs";
+                btn.innerHTML = '<i class="fas fa-user-shield"></i> Admin';
             }
         }
 
@@ -668,7 +714,7 @@
         }
 
         // ============================================================
-        // CALCULAR PONTOS (para exibição futura)
+        // CALCULAR PONTOS (não usado, mas mantido)
         // ============================================================
         function calculateParticipantPoints(participant) {
             if (officialResult.home === null || officialResult.away === null) return 0;
@@ -688,7 +734,6 @@
             const display = document.getElementById("jsonDisplay");
             if (!display) return;
             
-            // Construir JSON compacto para exibição
             let jsonText = '{\n  "participantes": [\n';
             participants.forEach((p, index) => {
                 const apostasStr = p.apostas.map(b => `{"brasil":${b.brasil},"haiti":${b.haiti}}`).join(',');
@@ -715,7 +760,7 @@
         }
 
         // ============================================================
-        // RENDERIZAR LISTA DE APOSTAS (SEM RANKING)
+        // RENDERIZAR LISTA DE APOSTAS
         // ============================================================
         function renderApostasList() {
             const container = document.getElementById("apostasList");
@@ -815,6 +860,11 @@
             });
             document.querySelectorAll(".removeBetBtn").forEach(btn => {
                 btn.addEventListener("click", (e) => {
+                    // Verifica se o usuário está autenticado (tem a senha)
+                    if (!isAdminAuthenticated) {
+                        showToast('🔒 Você precisa estar logado como administrador para remover apostas.', 'error');
+                        return;
+                    }
                     const betIdx = parseInt(btn.getAttribute("data-betindex"));
                     if (!isNaN(betIdx)) {
                         participant.apostas.splice(betIdx, 1);
@@ -829,6 +879,10 @@
         // FUNÇÕES DE ADMIN
         // ============================================================
         function addParticipant(name) {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             if (!name || name.trim() === "") name = "Novo Apostador";
             name = name.trim().substring(0, 25);
             
@@ -847,6 +901,10 @@
         }
 
         function deleteSelectedParticipant() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             if (participants.length <= 0) {
                 showToast('❌ Nenhum apostador', 'error');
                 return;
@@ -871,6 +929,10 @@
         }
 
         function resetSystem() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             if (confirm("⚠️ Resetar todas as apostas?")) {
                 participants = gerar80Vagas();
                 selectedParticipantId = participants[0]?.id || null;
@@ -881,6 +943,10 @@
         }
 
         function clearAllData() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             if (confirm("⚠️ APAGAR TODOS OS DADOS?")) {
                 localStorage.removeItem("bolaodabila");
                 participants = gerar80Vagas();
@@ -892,6 +958,10 @@
         }
 
         function gerar80VagasAction() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             if (confirm("⚠️ Isso irá recriar as 80 vagas. Continuar?")) {
                 participants = gerar80Vagas();
                 selectedParticipantId = participants[0]?.id || null;
@@ -902,6 +972,10 @@
         }
 
         function carregarExemplo() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             if (confirm("⚠️ Isso irá recarregar o exemplo com Roger e Maria. Todas as outras apostas serão perdidas. Continuar?")) {
                 participants = gerar80Vagas();
                 selectedParticipantId = participants[0]?.id || null;
@@ -912,6 +986,10 @@
         }
 
         function setOfficialResult() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             let homeVal = parseInt(document.getElementById("officialHomeGoals").value);
             let awayVal = parseInt(document.getElementById("officialAwayGoals").value);
             if (isNaN(homeVal) || isNaN(awayVal)) {
@@ -950,10 +1028,10 @@
             });
             
             const autoUpdateUrl = `${baseUrl}?${params.toString()}`;
-            const message = `⚽ *APOSTA BOLÃO DA BILA* ⚽\n\n📌 *Apostador:* ${name}\n🇧🇷 *Brasil* ${home} x ${away} *Haiti* 🇭🇹\n💰 *Valor:* R$ 25,00\n\n✅ Clique para registrar:\n${autoUpdateUrl}`;
+            const message = `⚽ *BOLÃO DA RÉ* ⚽\n\n📌 *Apostador:* ${name}\n🇧🇷 *Brasil* ${home} x ${away} *Haiti* 🇭🇹\n💰 *Valor:* R$ 30,00\n\n✅ Clique para registrar:\n${autoUpdateUrl}`;
             
             const encodedMessage = encodeURIComponent(message);
-            const phoneNumber = "12988461978";
+            const phoneNumber = "5512996416402"; // formato internacional sem espaços
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
             
             const container = document.getElementById("whatsappLinkContainer");
@@ -985,6 +1063,10 @@
         // FUNÇÕES JSON
         // ============================================================
         function exportJson() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             const jsonData = {
                 participantes: participants.map(p => ({
                     id: p.id,
@@ -1013,6 +1095,10 @@
         }
 
         function importJson() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             const input = document.createElement("input");
             input.type = "file";
             input.accept = ".json";
@@ -1055,13 +1141,16 @@
         }
 
         function toggleJsonEdit() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             const display = document.getElementById("jsonDisplay");
             const textarea = document.getElementById("jsonTextarea");
             const updateBtn = document.getElementById("updateJsonBtn");
             const cancelBtn = document.getElementById("cancelJsonBtn");
             
             if (textarea.classList.contains("hidden")) {
-                // Gerar JSON compacto para edição
                 let jsonText = '{\n  "participantes": [\n';
                 participants.forEach((p, index) => {
                     const apostasStr = p.apostas.map(b => `{"brasil":${b.brasil},"haiti":${b.haiti}}`).join(',');
@@ -1080,6 +1169,10 @@
         }
 
         function updateJsonFromEditor() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             const textarea = document.getElementById("jsonTextarea");
             try {
                 const data = JSON.parse(textarea.value);
@@ -1128,20 +1221,24 @@
         // ============================================================
         function shareWhatsApp() {
             const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent("⚽ BOLÃO DA BILA ⚽\nBrasil x Haiti - Placar Exato!\nFaça sua aposta (máx 2) R$25,00 cada.\nParticipe:");
+            const text = encodeURIComponent("⚽ BOLÃO DA RÉ ⚽\nBrasil x Haiti - Placar Exato!\nFaça sua aposta (máx 2) R$30,00 cada.\nParticipe:");
             window.open(`https://wa.me/?text=${text}%20${url}`, "_blank");
         }
 
         function copyPixKey() {
-            const pixKey = "12988461978";
+            const pixKey = "12 99641-6402";
             navigator.clipboard.writeText(pixKey).then(() => {
                 showToast('✅ Chave PIX copiada!', 'success');
             }).catch(() => {
-                showToast('✅ Chave PIX: 12988461978', 'info');
+                showToast('✅ Chave PIX: 12 99641-6402', 'info');
             });
         }
 
         function addBetToSelected() {
+            if (!isAdminAuthenticated) {
+                showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                return;
+            }
             if (!selectedParticipantId) {
                 showToast('❌ Selecione um apostador', 'error');
                 return;
@@ -1180,6 +1277,11 @@
         function bindEvents() {
             document.getElementById("toggleAdminBtn")?.addEventListener("click", () => toggleAdmin());
             document.getElementById("participantSelect")?.addEventListener("change", (e) => {
+                if (!isAdminAuthenticated) {
+                    showToast('🔒 Você precisa estar logado como administrador.', 'error');
+                    e.target.value = selectedParticipantId || '';
+                    return;
+                }
                 selectedParticipantId = e.target.value;
                 saveToLocalStorage();
                 updateAllUI();
@@ -1216,7 +1318,7 @@
             bindEvents();
             updateAllUI();
             setTimeout(() => processUrlParams(), 100);
-            showToast('🎯 Sistema pronto! Lista de apostas disponível.', 'success');
+            showToast('🎯 Bolão da Ré pronto!', 'success');
         }
         
         init();
